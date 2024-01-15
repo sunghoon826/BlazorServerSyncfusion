@@ -1,0 +1,33 @@
+﻿@page "/syncfusion"
+@rendermode InteractiveServer
+@using BlazorServerSyncfusion.Interfaces
+@using BlazorServerSyncfusion.Services
+@using BlazorServerSyncfusion.Models
+
+@inject IDatabase<TdmsFile> TdmsFileService
+
+<PageTitle>SyncfusionChart</PageTitle>
+<h3>SyncfusionChart</h3>
+
+@* <SfChart>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@files" XName="FileName" YName="Data" Type="ChartSeriesType.Line"/>
+    </ChartSeriesCollection>
+</SfChart>
+ *@
+ 
+@code {
+
+    // private List<TdmsFileData> files;
+
+    // public SyncfusionChart(List<TdmsFileData> files)
+    // {
+    //     this.files = files;
+    // }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var data1 = TdmsFileService.GetAsync();
+    }
+}
