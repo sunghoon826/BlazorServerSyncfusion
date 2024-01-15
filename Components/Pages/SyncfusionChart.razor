@@ -9,25 +9,39 @@
 <PageTitle>SyncfusionChart</PageTitle>
 <h3>SyncfusionChart</h3>
 
-@* <SfChart>
-    <ChartSeriesCollection>
-        <ChartSeries DataSource="@files" XName="FileName" YName="Data" Type="ChartSeriesType.Line"/>
-    </ChartSeriesCollection>
-</SfChart>
- *@
- 
+@if (files == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>File Name</th>
+                <th>Data (Base64)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in files)
+            {
+                <tr>
+                    <td>@file.Id</td>
+                    <td>@file.FileName</td>
+                    <td>@Convert.ToBase64String(file.Data)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Syncfusion 차트 또는 기타 컴포넌트를 여기에 추가 -->
 @code {
-
-    // private List<TdmsFileData> files;
-
-    // public SyncfusionChart(List<TdmsFileData> files)
-    // {
-    //     this.files = files;
-    // }
-
+    private List<TdmsFile> files;
 
     protected override async Task OnInitializedAsync()
     {
-        var data1 = TdmsFileService.GetAsync();
+        files = await TdmsFileService.GetAsync();
     }
 }
