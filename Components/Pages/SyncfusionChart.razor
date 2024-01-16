@@ -3,40 +3,35 @@
 @using BlazorServerSyncfusion.Interfaces
 @using BlazorServerSyncfusion.Services
 @using BlazorServerSyncfusion.Models
-
+@using Syncfusion.Blazor.Charts
 @inject IDatabase<TdmsFile> TdmsFileService
 
 <PageTitle>SyncfusionChart</PageTitle>
 <h3>SyncfusionChart</h3>
 
-@if (files == null)
+@if (files != null && files.Count > 0)
 {
-    <p><em>Loading...</em></p>
+    var file = files[0]; // 첫 번째 파일 사용
+    var fileService = TdmsFileService as TdmsFileService;
+    if (fileService != null)
+    {
+        var chartData = fileService.ConvertToChartData(file.Data);
+        <SfChart Title="@file.FileName">
+            <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Double"></ChartPrimaryXAxis> <!-- X축 ValueType 설정 -->
+            <ChartPrimaryYAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Double"></ChartPrimaryYAxis> <!-- Y축 ValueType 설정 -->
+            <ChartSeriesCollection>
+                <ChartSeries DataSource="@chartData"
+                             XName="Time" YName="Value" Type="ChartSeriesType.Line">
+                </ChartSeries>
+            </ChartSeriesCollection>
+        </SfChart>
+    }
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>File Name</th>
-                <th>Data (Base64)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var file in files)
-            {
-                <tr>
-                    <td>@file.Id</td>
-                    <td>@file.FileName</td>
-                    <td>@Convert.ToBase64String(file.Data)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <p><em>Loading...</em></p>
 }
 
-<!-- Syncfusion 차트 또는 기타 컴포넌트를 여기에 추가 -->
 @code {
     private List<TdmsFile> files;
 

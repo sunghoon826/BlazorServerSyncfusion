@@ -1,0 +1,32 @@
+# Default .gitignore for a Blazor Server project
+
+# Build Folders
+bin/
+obj/
+
+# Visual Studio cache/options directory
+.vs/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+
+# Local development
+Properties/launchSettings.json
+
+# Temporary files and logs
+*.log
+*.tmp
+*.tmp.*
+temp/
+tmp/
+
+# ReSharper
+_ReSharper*/
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Mac system files
+.DS_Store

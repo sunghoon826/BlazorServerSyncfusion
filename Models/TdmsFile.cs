@@ -5,9 +5,9 @@ namespace BlazorServerSyncfusion.Models;
 
 public partial class TdmsFile
 {
-    public int Id { get; set; }
+    public int Id { get; set; } // auto increase number id
 
-    public string FileName { get; set; } = null!;
+    public string FileName { get; set; } = null!; //TDMS file name
 
-    public byte[] Data { get; set; } = null!;
+    public byte[] Data { get; set; } = null!; //12800 or 6400
 }

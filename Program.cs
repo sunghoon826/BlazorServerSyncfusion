@@ -2,6 +2,7 @@ using BlazorServerSyncfusion.Components;
 using BlazorServerSyncfusion.Interfaces;
 using BlazorServerSyncfusion.Models;
 using BlazorServerSyncfusion.Services;
+using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddDbContext<TdmsFilesContext>();
 builder.Services.AddScoped<IDatabase<TdmsFile>, TdmsFileService>();
+builder.Services.AddSyncfusionBlazor();
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzAzODE2NUAzMjM0MmUzMDJlMzBKMXYvNm40M3Z5aGNWNFB0cnpXekZXb0l5ZXVPbG5NR3hpSlJ6WTlGblFZPQ=="); //라이센스 추가
 
 var app = builder.Build();
 
