@@ -1,8 +1,6 @@
 ﻿using BlazorServerSyncfusion.Interfaces;
 using BlazorServerSyncfusion.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
-using System.Text.Json;
 namespace BlazorServerSyncfusion.Services
 {
     public class TdmsFileService : IDatabase<TdmsFile>
@@ -21,36 +19,21 @@ namespace BlazorServerSyncfusion.Services
 
         public TdmsFile GetDetail(int? id)
         {
-            if (id == null || _context?.TdmsFiles == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+            if (id == null)
+                throw new ArgumentNullException(nameof(id), "ID cannot be null.");
+
+            if (_context?.TdmsFiles == null)
+                throw new InvalidOperationException("Database context not initialized.");
 
             var file = _context.TdmsFiles.Find(id);
-            if (file != null)
-            {
-                // 바이너리 데이터를 JSON 문자열로 변환
-                string jsonString = ConvertToJSON(file);
-                // 여기서 JSON 문자열을 처리하거나 반환
-            }
-
-            return file;
-        }
-
-        private string ConvertToJSON(TdmsFile file)
-        {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-            return JsonSerializer.Serialize(file, options);
+            return file; // 여기서 필요한 경우 추가 처리를 수행
         }
     }
 
 
     public class ChartData
     {
-        public double Time { get; set; } // 바이너리로 들어가는 문제
+        public double Time { get; set; }
         public double Value { get; set; }
     }
 }
