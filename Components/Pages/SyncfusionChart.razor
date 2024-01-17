@@ -2,6 +2,7 @@
 @using BlazorServerSyncfusion.Interfaces
 @using BlazorServerSyncfusion.Services
 @using BlazorServerSyncfusion.Models
+@using Syncfusion.Blazor
 @using Syncfusion.Blazor.Charts
 @using System.Text;
 @using System.Text.Json;
@@ -10,30 +11,64 @@
 
 <PageTitle>SyncfusionChart</PageTitle>
 <h3>SyncfusionChart</h3>
-<SfChart Title="TDMS Data Visualization">
-    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Double" Interval="0.078125"></ChartPrimaryXAxis>
-    <ChartPrimaryYAxis Maximum="1"></ChartPrimaryYAxis>
+<SfChart ID="chart" Title="TDMS Data Chart">
+    <ChartArea>
+       <ChartAreaBorder Width="0"></ChartAreaBorder>
+    </ChartArea>
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Double">
+     <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+    </ChartPrimaryXAxis>
+    <ChartPrimaryYAxis Maximum="0.1">
+     <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+    </ChartPrimaryYAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    <ChartLegendSettings EnableHighlight="true"></ChartLegendSettings>
     <ChartSeriesCollection>
-        <ChartSeries DataSource="@chartData" XName="Time" YName="Value" Type="ChartSeriesType.Line">
+        <ChartSeries DataSource="@chartData" XName="Time" YName="Value" Type="ChartSeriesType.Spline">
         </ChartSeries>
     </ChartSeriesCollection>
 </SfChart>
+
+@xValue;
 
 @code {
     private string jsonContent;
     private List<double> dataList = new List<double>();
     private List<ChartData> chartData;
+    int xValue = 0;
 
     protected override async Task OnInitializedAsync()
     {
         var tdmsFiles = await TdmsFileService.GetAsync();
-        if (tdmsFiles != null && tdmsFiles.Any())
+        //if (tdmsFiles != null && tdmsFiles.Any())
+        //{
+        //    var firstFile = tdmsFiles.First();
+        //    jsonContent = ConvertToBase64(firstFile.Data);
+        //    ParseJsonData(jsonContent);
+        //    chartData = ConvertToChartData(dataList);
+        //}
+        Test();
+    }
+
+    void Test()
+    {
+        int arraySize = 12800;
+        double[] randomValues = new double[arraySize];
+
+        Random random = new Random();
+        List<double> testData = new List<double>();
+
+        for (int i = 0; i < arraySize; i++)
         {
-            var firstFile = tdmsFiles.First();
-            jsonContent = ConvertToBase64(firstFile.Data);
-            ParseJsonData(jsonContent);
-            chartData = ConvertToChartData(dataList);
+            // -1에서 1 사이의 랜덤한 double 값 생성
+            double randomValue = (random.NextDouble() * 2) - 1;
+            randomValues[i] = randomValue;
+            testData.Add(randomValues[i]);
         }
+        chartData = ConvertToChartData(testData);
+        xValue = chartData.Count;
     }
 
     private void ParseJsonData(string json)
@@ -73,7 +108,7 @@
             chartDataList.Add(new
     ChartData
                 { Time = time, Value = value });
-            time += 0.078125;
+            time += 1;
         }
         return chartDataList;
     }
