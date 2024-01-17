@@ -1,42 +1,42 @@
 ﻿@page "/syncfusion"
-@rendermode InteractiveServer
 @using BlazorServerSyncfusion.Interfaces
 @using BlazorServerSyncfusion.Services
 @using BlazorServerSyncfusion.Models
 @using Syncfusion.Blazor.Charts
+@using System.Text;
+@using System.Text.Json;
 @inject IDatabase<TdmsFile> TdmsFileService
+@rendermode InteractiveServer
+
+
+
 
 <PageTitle>SyncfusionChart</PageTitle>
 <h3>SyncfusionChart</h3>
-
-@if (files != null && files.Count > 0)
+@if (jsonContent != null)
 {
-    var file = files[0]; // 첫 번째 파일 사용
-    var fileService = TdmsFileService as TdmsFileService;
-    if (fileService != null)
-    {
-        var chartData = fileService.ConvertToChartData(file.Data);
-        <SfChart Title="@file.FileName">
-            <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Double"></ChartPrimaryXAxis> <!-- X축 ValueType 설정 -->
-            <ChartPrimaryYAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Double"></ChartPrimaryYAxis> <!-- Y축 ValueType 설정 -->
-            <ChartSeriesCollection>
-                <ChartSeries DataSource="@chartData"
-                             XName="Time" YName="Value" Type="ChartSeriesType.Line">
-                </ChartSeries>
-            </ChartSeriesCollection>
-        </SfChart>
-    }
+    <pre>@jsonContent</pre>
 }
 else
 {
-    <p><em>Loading...</em></p>
+    <p>Loading...</p>
 }
 
 @code {
-    private List<TdmsFile> files;
+    private string jsonContent;
 
     protected override async Task OnInitializedAsync()
     {
-        files = await TdmsFileService.GetAsync();
+        var tdmsFiles = await TdmsFileService.GetAsync();
+        if (tdmsFiles != null && tdmsFiles.Any())
+        {
+            var firstFile = tdmsFiles.First();
+            jsonContent = ConvertToBase64(firstFile.Data);
+        }
+    }
+
+    private string ConvertToBase64(byte[] data)
+    {
+        return Encoding.UTF8.GetString(data);
     }
 }

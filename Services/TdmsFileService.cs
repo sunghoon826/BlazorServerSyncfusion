@@ -1,7 +1,8 @@
 ﻿using BlazorServerSyncfusion.Interfaces;
 using BlazorServerSyncfusion.Models;
 using Microsoft.EntityFrameworkCore;
-
+using System.Text;
+using System.Text.Json;
 namespace BlazorServerSyncfusion.Services
 {
     public class TdmsFileService : IDatabase<TdmsFile>
@@ -25,44 +26,31 @@ namespace BlazorServerSyncfusion.Services
                 throw new ArgumentNullException(nameof(id));
             }
 
-            return _context.TdmsFiles.Find(id);
-        }
-
-        public List<double> ConvertToDoubleList(byte[] data)
-        {
-            if (data == null || data.Length % 8 != 0)
-                return new List<double>();
-
-            double[] resultArray = new double[data.Length / 8];
-            for (int i = 0; i < resultArray.Length; i++)
+            var file = _context.TdmsFiles.Find(id);
+            if (file != null)
             {
-                resultArray[i] = BitConverter.ToDouble(data, i * 8);
+                // 바이너리 데이터를 JSON 문자열로 변환
+                string jsonString = ConvertToJSON(file);
+                // 여기서 JSON 문자열을 처리하거나 반환
             }
 
-            // 배열을 List<double>로 변환하여 반환
-            return new List<double>(resultArray);
+            return file;
         }
 
-        public List<ChartData> ConvertToChartData(byte[] data)
+        private string ConvertToJSON(TdmsFile file)
         {
-            var doubleList = ConvertToDoubleList(data);
-            var chartData = new List<ChartData>();
-            double time = 0;
-            double timeInterval = 0.078125; // 시간 간격
-
-            foreach (var value in doubleList)
+            var options = new JsonSerializerOptions
             {
-                chartData.Add(new ChartData { Time = time, Value = value });
-                time += timeInterval;
-            }
-
-            return chartData;
+                WriteIndented = true
+            };
+            return JsonSerializer.Serialize(file, options);
         }
     }
 
+
     public class ChartData
     {
-        public double Time { get; set; }
+        public double Time { get; set; } // 바이너리로 들어가는 문제
         public double Value { get; set; }
     }
 }

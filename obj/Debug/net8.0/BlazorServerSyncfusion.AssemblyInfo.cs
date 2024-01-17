@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BlazorServerSyncfusion")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c98a99ebc72bd82f60dd23f2cf8a7a22d1db2608")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aabf2b002caed49c5661670b319d4ecf221c0291")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlazorServerSyncfusion")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlazorServerSyncfusion")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
