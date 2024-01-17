@@ -13,17 +13,19 @@
 
 <PageTitle>SyncfusionChart</PageTitle>
 <h3>SyncfusionChart</h3>
-@if (jsonContent != null)
-{
-    <pre>@jsonContent</pre>
-}
-else
-{
-    <p>Loading...</p>
-}
+<SfChart Title="TDMS Data Visualization">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Double" Interval="0.078125"></ChartPrimaryXAxis>
+    <ChartPrimaryYAxis Maximum="1"></ChartPrimaryYAxis>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@chartData" XName="Time" YName="Value" Type="ChartSeriesType.Line">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
 
 @code {
     private string jsonContent;
+    private List<double> dataList = new List<double>();
+    private List<ChartData> chartData;
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,11 +34,50 @@ else
         {
             var firstFile = tdmsFiles.First();
             jsonContent = ConvertToBase64(firstFile.Data);
+            ParseJsonData(jsonContent);
+            chartData = ConvertToChartData(dataList);
+        }
+    }
+
+    private void ParseJsonData(string json)
+    {
+        try
+        {
+            var jsonDoc = JsonDocument.Parse(json);
+            var root = jsonDoc.RootElement;
+            if (root.TryGetProperty("Data", out var dataElement) && dataElement.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in dataElement.EnumerateArray())
+                {
+                    if (item.TryGetDouble(out double value))
+                    {
+                        dataList.Add(value);
+                    }
+                }
+            }
+        }
+        catch (JsonException ex)
+        {
+            Console.WriteLine($"JSON parsing error: {ex.Message}");
         }
     }
 
     private string ConvertToBase64(byte[] data)
     {
         return Encoding.UTF8.GetString(data);
+    }
+
+    private List<ChartData> ConvertToChartData(List<double> dataList)
+    {
+        var chartDataList = new List<ChartData>();
+        double time = 0;
+        foreach (var value in dataList)
+        {
+            chartDataList.Add(new
+    ChartData
+                { Time = time, Value = value });
+            time += 0.078125;
+        }
+        return chartDataList;
     }
 }
