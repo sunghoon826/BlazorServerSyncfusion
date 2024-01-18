@@ -13,63 +13,67 @@
 <h3>SyncfusionChart</h3>
 <SfChart ID="chart" Title="TDMS Data Chart">
     <ChartArea>
-       <ChartAreaBorder Width="0"></ChartAreaBorder>
+        <ChartAreaBorder Width="0" />
     </ChartArea>
     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Double">
-     <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+        <ChartAxisMajorGridLines Width="0" />
+        <ChartAxisMajorTickLines Width="0" />
+        <ChartAxisCrosshairTooltip Enable="true" />
     </ChartPrimaryXAxis>
     <ChartPrimaryYAxis Maximum="0.1">
-     <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+        <ChartAxisLineStyle Width="0" />
+        <ChartAxisMajorTickLines Width="0" />
+        <ChartAxisCrosshairTooltip Enable="true" />
     </ChartPrimaryYAxis>
-    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-    <ChartLegendSettings EnableHighlight="true"></ChartLegendSettings>
+    <ChartCrosshairSettings Enable="true" LineType="LineType.Both" />
+    <ChartTooltipSettings Enable="true" />
+    <ChartLegendSettings EnableHighlight="true" />
     <ChartSeriesCollection>
         <ChartSeries DataSource="@chartData" XName="Time" YName="Value" Type="ChartSeriesType.Spline">
         </ChartSeries>
     </ChartSeriesCollection>
 </SfChart>
 
-@xValue;
 
+@* @xValue;
+ *@
 @code {
     private string jsonContent;
     private List<double> dataList = new List<double>();
     private List<ChartData> chartData;
-    int xValue = 0;
+    // int xValue = 0;
 
     protected override async Task OnInitializedAsync()
     {
         var tdmsFiles = await TdmsFileService.GetAsync();
-        //if (tdmsFiles != null && tdmsFiles.Any())
-        //{
-        //    var firstFile = tdmsFiles.First();
-        //    jsonContent = ConvertToBase64(firstFile.Data);
-        //    ParseJsonData(jsonContent);
-        //    chartData = ConvertToChartData(dataList);
-        //}
-        Test();
-    }
-
-    void Test()
-    {
-        int arraySize = 12800;
-        double[] randomValues = new double[arraySize];
-
-        Random random = new Random();
-        List<double> testData = new List<double>();
-
-        for (int i = 0; i < arraySize; i++)
+        if (tdmsFiles != null && tdmsFiles.Any())
         {
-            // -1에서 1 사이의 랜덤한 double 값 생성
-            double randomValue = (random.NextDouble() * 2) - 1;
-            randomValues[i] = randomValue;
-            testData.Add(randomValues[i]);
+           var firstFile = tdmsFiles.First();
+           jsonContent = ConvertToBase64(firstFile.Data);
+           ParseJsonData(jsonContent);
+           chartData = ConvertToChartData(dataList);
         }
-        chartData = ConvertToChartData(testData);
-        xValue = chartData.Count;
+        // Test();
     }
+
+    // void Test()
+    // {
+    //     int arraySize = 12800;
+    //     double[] randomValues = new double[arraySize];
+
+    //     Random random = new Random();
+    //     List<double> testData = new List<double>();
+
+    //     for (int i = 0; i < arraySize; i++)
+    //     {
+    //         // -1에서 1 사이의 랜덤한 double 값 생성
+    //         double randomValue = (random.NextDouble() * 2) - 1;
+    //         randomValues[i] = randomValue;
+    //         testData.Add(randomValues[i]);
+    //     }
+    //     chartData = ConvertToChartData(testData);
+    //     xValue = chartData.Count;
+    // }
 
     private void ParseJsonData(string json)
     {
@@ -103,13 +107,17 @@
     {
         var chartDataList = new List<ChartData>();
         double time = 0;
+
         foreach (var value in dataList)
         {
-            chartDataList.Add(new
-    ChartData
-                { Time = time, Value = value });
+            chartDataList.Add(new ChartData
+                {
+                    Time = time,
+                    Value = value
+                });
             time += 1;
         }
+
         return chartDataList;
     }
 }

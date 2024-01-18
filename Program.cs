@@ -13,7 +13,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContext<TdmsFilesContext>();
 builder.Services.AddScoped<IDatabase<TdmsFile>, TdmsFileService>();
 builder.Services.AddSyncfusionBlazor();
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzAzODE2NUAzMjM0MmUzMDJlMzBKMXYvNm40M3Z5aGNWNFB0cnpXekZXb0l5ZXVPbG5NR3hpSlJ6WTlGblFZPQ=="); //라이센스 추가
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzA0NjUzN0AzMjM0MmUzMDJlMzBnS05HTzR6SGVlVUtMQlVrRzNQZFRqZGJFV0ZWZDFIMHkrVU5GdWVvVlk0PQ=="); //라이센스 추가
 
 var app = builder.Build();
 
